@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>간호조무사 국가시험 모의고사</title>
+  <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+  <!-- ========== 시작 화면 ========== -->
+  <div id="screen-start" class="screen active">
+    <header class="top-bar">
+      <div class="top-left">
+        <span class="badge">01</span>
+        <span class="user-info">간호조무사 모의고사</span>
+      </div>
+      <div class="top-center"><h2>모의고사 선택</h2></div>
+      <div class="top-right">
+        <span class="clock-icon">🕐</span>
+        <span id="current-time"></span>
+      </div>
+    </header>
+
+    <main class="start-content">
+      <div class="start-box">
+        <h1>응시하기 버튼을 클릭하면 시험이 시작됩니다.</h1>
+        <p class="sub-desc">제한 시간 105분 / 총 105문항 (5지선다)</p>
+
+        <table class="info-table">
+          <tr><th>시험명</th><td>
+            <select id="exam-select">
+              <option value="">-- 회차를 선택하세요 --</option>
+            </select>
+          </td></tr>
+          <tr><th>교시</th><td>1교시</td></tr>
+          <tr><th>문항 수</th><td>105문항</td></tr>
+          <tr><th>제한 시간</th><td>105분</td></tr>
+        </table>
+
+        <button id="btn-start" class="btn-primary" disabled>시험 응시하기</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========== 시험 화면 ========== -->
+  <div id="screen-exam" class="screen">
+    <header class="top-bar">
+      <div class="top-left">
+        <span class="badge">01</span>
+        <span class="user-info" id="exam-round-label">모의고사</span>
+      </div>
+      <div class="top-center">
+        <h2 id="exam-title">모의고사</h2>
+      </div>
+      <div class="top-right-exam">
+        <div class="font-controls">
+          <span>글자 크기</span>
+          <button class="font-btn" data-size="small">가<sub>80%</sub></button>
+          <button class="font-btn active" data-size="medium">가<sub>100%</sub></button>
+          <button class="font-btn" data-size="large">가<sub>125%</sub></button>
+        </div>
+        <div class="layout-controls">
+          <span>화면 배치</span>
+          <button class="layout-btn active" data-layout="1">1단 보기</button>
+          <button class="layout-btn" data-layout="2">2단 보기</button>
+        </div>
+        <div class="timer-display">
+          <span>제한 시간 : 105분</span>
+          <span>남은 시간 : <strong id="timer-remaining" class="timer-value">105:00</strong></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="exam-body">
+      <!-- 문제 영역 -->
+      <div class="question-area" id="question-area">
+        <div class="question-instruction">가장 적합한 답 하나만 고르시오</div>
+        <div id="question-container" class="question-container"></div>
+      </div>
+
+      <!-- 답안 표기란 -->
+      <div class="answer-panel" id="answer-panel">
+        <div class="answer-panel-header">답안 표기란</div>
+        <div id="subject-tabs" class="subject-tabs"></div>
+        <div class="answer-grid" id="answer-grid"></div>
+      </div>
+    </div>
+
+    <footer class="exam-footer">
+      <div class="nav-buttons">
+        <button id="btn-prev" class="btn-nav">&lt; 이전</button>
+        <span id="page-indicator">1 / 105</span>
+        <button id="btn-next" class="btn-nav">다음 &gt;</button>
+      </div>
+      <button id="btn-submit" class="btn-submit">답안 제출 ⬆</button>
+    </footer>
+  </div>
+
+  <!-- ========== 결과 화면 ========== -->
+  <div id="screen-result" class="screen">
+    <header class="top-bar">
+      <div class="top-left">
+        <span class="badge">01</span>
+        <span class="user-info" id="result-round-label">모의고사</span>
+      </div>
+      <div class="top-center"><h2 id="result-title">모의고사 결과</h2></div>
+      <div class="top-right">
+        <span class="clock-icon">🕐</span>
+        <span id="result-time"></span>
+      </div>
+    </header>
+
+    <div class="result-body">
+      <div class="score-summary" id="score-summary"></div>
+
+      <div class="review-area">
+        <div class="review-questions" id="review-questions"></div>
+        <div class="review-answer-panel" id="review-answer-panel">
+          <div class="answer-panel-header">답안 표기란</div>
+          <div class="answer-grid" id="review-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="exam-footer">
+      <div class="nav-buttons">
+        <button id="btn-prev-review" class="btn-nav">&lt; 이전</button>
+        <span id="review-page-indicator">1 / 105</span>
+        <button id="btn-next-review" class="btn-nav">다음 &gt;</button>
+      </div>
+      <button id="btn-retry" class="btn-retry">다시 풀기</button>
+    </footer>
+  </div>
+
+  <!-- 제출 확인 모달 -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h3>답안을 제출하시겠습니까?</h3>
+      <p id="modal-unanswered"></p>
+      <div class="modal-buttons">
+        <button id="modal-cancel" class="btn-modal-cancel">취소</button>
+        <button id="modal-confirm" class="btn-modal-confirm">제출</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="answers.js"></script>
+  <script src="questions_data.js"></script>
+  <script>
+    // Verify data loaded
+    if (typeof QUESTIONS_DATA !== 'undefined' && QUESTIONS_DATA) {
+      console.log('✓ QUESTIONS_DATA loaded successfully');
+      console.log('✓ Rounds available:', Object.keys(QUESTIONS_DATA).length);
+      if (QUESTIONS_DATA['1'] && QUESTIONS_DATA['1']['1']) {
+        console.log('✓ Sample Q1:', QUESTIONS_DATA['1']['1'].text.substring(0, 50));
+      }
+    } else {
+      console.error('✗ QUESTIONS_DATA is null or undefined!');
+      window.QUESTIONS_DATA = null;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
